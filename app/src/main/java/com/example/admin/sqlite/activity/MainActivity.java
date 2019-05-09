@@ -1,23 +1,34 @@
-package com.example.admin.sqlite;
+package com.example.admin.sqlite.activity;
 
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.admin.sqlite.Adapter.NguoidungAdapter;
+import com.example.admin.sqlite.R;
+import com.example.admin.sqlite.database.SQLite;
+import com.example.admin.sqlite.databinding.ActivityMainBinding;
+import com.example.admin.sqlite.viewmodel.Mainmodel;
 
 public class MainActivity extends AppCompatActivity {
 
     SQLite sqLite;
+    ActivityMainBinding activityMainBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        Mainmodel mainmodel = new Mainmodel(this,android.R.layout.simple_list_item_1);
+        sqLite = new SQLite(this,"Quanlynguoidung.sql",null,1);
+        mainmodel.setUpdata(sqLite);
+
+        activityMainBinding.setMainmodel(mainmodel);
+        activityMainBinding.executePendingBindings();
+
 
         //Tao database
-        sqLite = new SQLite(this,"Quanlynguoidung.sql",null,1);
+
         //Tao bang
 //        String createTable = "CREATE TABLE IF NOT EXISTS Nguoidung (Id INTEGER PRIMARY KEY AUTOINCREMENT , Ten VARCHAR , Namsinh VARCHAR , Diachi VARCHAR)";
 //
@@ -34,17 +45,12 @@ public class MainActivity extends AppCompatActivity {
 //        sqLite.QueryData(insert3);
 //        sqLite.QueryData(insert4);
         //Lay du lieu
-        String laydulieu = "SELECT * FROM Nguoidung";
-        Cursor cursor = sqLite.GetData(laydulieu);
+
 
         //Cach kiem tra vi tri cua cot
 //        int id = cursor.getColumnIndex("Id");
-        while (cursor.moveToNext()){
-            int id = cursor.getInt(0);
-            String ten = cursor.getString(1);
-            String namsinh = cursor.getString(2);
-            String diachi = cursor.getString(3);
-        }
+
 //
+
     }
 }
